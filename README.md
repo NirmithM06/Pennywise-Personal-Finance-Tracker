@@ -1,83 +1,201 @@
-# Pennywise — Personal Finance & Expense Tracker
+# Pennywise – Personal Finance & Expense Tracker
 
-A full-stack course project using HTML, CSS, vanilla JavaScript, Express and JSON files. Version 1.1 fixes the review findings and adds transaction editing, search, pagination and spending insights.
+A full-stack personal finance management application built using **HTML, CSS, JavaScript, Node.js and Express.js**. Pennywise helps users manage their income, track expenses, monitor monthly budgets, and understand their spending habits through a clean and responsive interface.
 
-## Run locally
+## Screenshots
 
-1. Install Node.js 22 or newer (an actively supported LTS release is recommended).
-2. Open a terminal in this folder and run `npm ci`.
-3. Copy `.env.example` to `.env` (`cp .env.example .env` on macOS/Linux, `Copy-Item .env.example .env` in PowerShell).
-4. Generate a secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"` and paste it as `SESSION_SECRET` in `.env`. The example placeholder is deliberately rejected.
-5. Run `npm start` and open http://localhost:3000.
+### 1. Landing Page
+![Pennywise Landing Page](screenshots/2.png)
 
-Use `npm run dev` for automatic restarts, and `npm test` for the API regression suite. Tests create and remove their own temporary data directory; they do not change your personal records. No accounts, passwords, runtime data or node_modules are included in the ZIP.
+### 2. User Authentication
+![Login Page](screenshots/3.png)
+
+### 3. Dashboard
+View total balance, income, expenses, spending categories and recent transactions.
+
+![Dashboard](screenshots/4.png)
+
+### 4. Transaction Management
+Add income and expense transactions with categories, dates and notes.
+
+![Transaction Management](screenshots/1.png)
+
+### 5. Transaction History
+Search, filter, edit and manage previously recorded transactions.
+
+![Transaction History](screenshots/5.png)
+
+### 6. Monthly Budget Management
+Set monthly spending limits and monitor expenses against the selected budget.
+
+![Monthly Budget](screenshots/6.png)
+
+### 7. Budget Overview
+![Budget Overview](screenshots/7.png)
+
+---
 
 ## Features
 
-- Registration, login, logout and persistent seven-day sessions; each user sees only their own records.
-- Add, edit and delete income/expense transactions with date, category and notes.
-- Expense categories: Food, Rent, Travel, Utilities, Other. Income categories: Salary, Freelance, Gifts, Other. Older category assignments remain editable.
-- All-time or selected-month income, expenses and balance, category spending bars, and comparison with the previous month.
-- History search by notes/category, type/category/date filters, and ten-row client-side pagination.
-- Monthly spending budgets with expense-only totals and accessible progress indicators. The dashboard preview explicitly labels the selected budget month.
-- CSV and JSON exports of the complete account history (not only the currently filtered rows).
-- Responsive logout controls at phone, tablet and desktop widths, keyboard focus styles, retry/loading messages and session-expiry handling.
+- **User Authentication:** Registration, login and logout with password hashing and persistent sessions.
+- **Dashboard:** Overview of income, expenses, balance and spending insights.
+- **Transaction Management:** Add, edit and delete income and expense records.
+- **Transaction History:** Search and filter transactions by category, type and date.
+- **Monthly Budget:** Set monthly spending limits and track expenses.
+- **Spending Insights:** Category-wise spending breakdown and monthly comparisons.
+- **Data Export:** Export transaction history in CSV and JSON formats.
+- **Data Persistence:** Store user accounts, transactions and sessions using JSON files.
+- **Responsive UI:** Interface designed for desktop, tablet and mobile screens.
 
-## Reliability and storage
+## Tech Stack
 
-New amounts are stored as integer paise (`amountPaise` and `limitPaise`); decimal conversion is performed only at the API/display boundary. Existing files from version 1.0 using rupee `amount`/`limit` values are readable; edited records use paise. Back up the old data directory before upgrading and copy it into this project's data directory while the server is stopped. This ZIP starts empty.
+| Category | Technologies |
+|---|---|
+| Frontend | HTML5, CSS3, JavaScript |
+| Backend | Node.js, Express.js |
+| Data Storage | JSON File System |
+| Authentication | bcryptjs, express-session |
+| Security | Helmet, express-rate-limit |
+| Testing | Node.js Test Runner |
 
-All collection changes serialize the complete read/modify/write operation. Writes use unique temporary files, file synchronization and atomic rename. Duplicate registration checks run within the same serialized operation. Session operations use the same mechanism; a failed operation does not poison later queue operations. Expired sessions are ignored and removed on subsequent session creation/saves.
+## Project Structure
 
-**Run exactly one Node server process per data directory.** This is a simple single-process course-project store, not a multi-process database. Do not run cluster mode, multiple replicas or two servers against the same directory. History filtering and pagination currently load the user's full history into the browser. For large datasets or multi-server hosting, migrate to SQLite/PostgreSQL with database transactions, unique constraints, server-side pagination and a maintained shared session store.
+```text
+personal-finance-tracker/
+│
+├── data/
+│   └── .gitkeep
+│
+├── public/
+│   ├── app.js
+│   ├── index.html
+│   └── styles.css
+│
+├── screenshots/
+│   ├── 1.png
+│   ├── 2.png
+│   ├── 3.png
+│   ├── 4.png
+│   ├── 5.png
+│   ├── 6.png
+│   └── 7.png
+│
+├── tests/
+│   └── regression.test.js
+│
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── server.js
+├── storage.js
+├── README.md
+└── TESTING.md
+```
 
-Missing collections start empty. Malformed/unreadable files are preserved and operations fail explicitly; they are never silently replaced with an empty collection. To back up, stop the server and copy the complete data directory to a secure location. To recover, stop the server, retain a copy of the damaged file, restore a verified backup, then restart. Protect backups because users.json contains password hashes and sessions.json contains session records.
+## Installation and Setup
 
-## Deployment configuration
+### Prerequisites
 
-Local defaults are in `.env.example`. Keep `.env` and runtime files out of version control.
+- Node.js 22 or newer
+- npm
 
-- `PORT`: listening port (default 3000).
-- `SESSION_SECRET`: randomly generated secret, at least 32 characters.
-- `NODE_ENV=production`: enables secure session cookies; serve the application over HTTPS.
-- `APP_ORIGIN`: exact public origin, e.g. `https://finance.example.com`, without a trailing slash. Used to reject cross-origin mutation requests.
-- `TRUST_PROXY`: optional comma-separated trusted proxy IPs/CIDRs, e.g. `127.0.0.1/8,::1/128` for a same-host proxy. Only trust actual proxy addresses; leave unset for direct access. The proxy must set the correct forwarded protocol.
-- `DATA_DIR`: optional absolute persistent-data directory. Leave unset for the local data folder.
+### 1. Clone the repository
 
-Helmet provides security headers; authentication endpoints allow 30 attempts per IP per 15 minutes. That rate limiter is in-memory and resets on restart. SameSite cookies and origin checks help protect browser mutations. Passwords are bcrypt hashes; new passwords must have at least eight characters and at most 72 UTF-8 bytes.
+```bash
+git clone https://github.com/NirmithM06/Pennywise-Personal-Finance-Tracker.git
+```
 
-CSV formula-like text is prefixed with an apostrophe and all cells are quoted. Spreadsheet interpretation varies: use JSON when exact original text matters, and do not remove text protection or enable formulas from untrusted notes.
+### 2. Navigate to the project directory
 
-## Project structure
+```bash
+cd Pennywise-Personal-Finance-Tracker
+```
 
-- `server.js`: API routes, validation, authentication, session store, exports and headers.
-- `storage.js`: serialized collection updates and atomic writes.
-- `public/index.html`: forms, navigation, dashboard and history.
-- `public/app.js`: UI state, API requests, charts, filtering and pagination.
-- `public/styles.css`: responsive styling and accessibility refinements.
-- `tests/regression.test.js`: API integration and persistence regression checks.
-- `data/`: runtime collections; only the placeholder is distributed.
+### 3. Install dependencies
 
-## API routes
+```bash
+npm ci
+```
 
-| Method | Route | Purpose |
-| --- | --- | --- |
-| POST | /api/auth/register | Create an account |
-| POST | /api/auth/login | Sign in |
-| GET | /api/auth/me | Current account or null |
-| POST | /api/auth/logout | Destroy session |
-| GET | /api/transactions | Own history; optional category/from/to query filters |
-| POST | /api/transactions | Add transaction |
-| PUT | /api/transactions/:id | Edit owned transaction |
-| DELETE | /api/transactions/:id | Delete owned transaction |
-| GET | /api/budget?month=YYYY-MM | Monthly limit and expense total |
-| PUT | /api/budget | Set monthly limit |
-| GET | /api/export?format=csv | CSV export (also accepts json) |
+### 4. Configure environment variables
 
-Transaction writes accept `type`, `amount` (decimal string recommended), `category`, `date` (YYYY-MM-DD), and optional `notes` (250 characters). Budget writes accept `month` and decimal `limit`. Protected routes derive ownership from the session, never from a client-supplied user ID.
+Create a `.env` file by copying `.env.example`.
 
-## Testing and demonstration
+For Windows PowerShell:
 
-`npm test` checks decimal acceptance/rejection, 20 concurrent saves, edits, ownership isolation, totals, formula-prefixed exports, origin rejection, malformed/oversized JSON, restart persistence, logout/expiry, concurrent duplicate registration, and recovery after a corrupted file.
+```powershell
+Copy-Item .env.example .env
+```
 
-For a manual demo: register two accounts, add expenses/income, edit a decimal amount, search/filter history, set budgets for two months, compare dashboard months, export CSV/JSON, and verify the second account has separate records. Check keyboard navigation and logout at 375px, 768px and desktop widths.
+Generate a secure session secret:
+
+```bash
+node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
+```
+
+Copy the generated value into `.env` as `SESSION_SECRET`.
+
+### 5. Start the application
+
+```bash
+npm start
+```
+
+Open the application in your browser:
+
+```text
+http://localhost:3000
+```
+
+## Testing
+
+Run the automated regression tests using:
+
+```bash
+npm test
+```
+
+The test suite covers:
+
+- Authentication and session handling
+- Transaction validation and persistence
+- User data isolation
+- Concurrent transaction updates
+- Transaction editing
+- Budget calculations
+- CSV and JSON exports
+- Data recovery and error handling
+
+**Test Result:** All regression tests passed.
+
+## Security and Reliability
+
+- Passwords are stored as bcrypt hashes.
+- Session cookies use HTTP-only and SameSite protections.
+- Authentication endpoints have rate limiting.
+- API requests include validation and ownership checks.
+- File updates use serialized operations and atomic writes.
+- Runtime data and environment secrets are excluded from version control.
+
+## Future Improvements
+
+- Interactive spending analytics and visual reports.
+- Additional financial insights and savings recommendations.
+- Database migration to SQLite or PostgreSQL.
+- Cloud deployment and persistent hosted storage.
+
+---
+
+## Author
+
+**Nirmith Sai Manda**
+
+B.Tech – Information Technology  
+Manipal Institute of Technology, Manipal
+
+GitHub: [@NirmithM06](https://github.com/NirmithM06)
+
+---
+
+⭐ If you find this project interesting, consider giving the repository a star!

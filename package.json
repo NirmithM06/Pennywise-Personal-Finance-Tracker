@@ -1,0 +1,23 @@
+{
+  "name": "personal-finance-expense-tracker",
+  "version": "1.1.0",
+  "private": true,
+  "description": "A responsive personal finance tracker built with vanilla JavaScript, Express, and JSON files.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.3",
+    "express-session": "^1.18.1",
+    "helmet": "^8.3.0"
+  }
+}

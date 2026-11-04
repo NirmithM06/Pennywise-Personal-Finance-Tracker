@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f4">
+  <title>Personal Finance Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <main id="auth-screen" class="auth-shell">
+    <section class="auth-visual" aria-label="About the finance tracker">
+      <a class="brand brand-light" href="#"><span class="brand-mark">◎</span> Pennywise</a>
+      <div class="visual-copy">
+        <span class="eyebrow">YOUR MONEY, IN FOCUS</span>
+        <h1>Make room for<br><em>what matters.</em></h1>
+        <p>A calmer way to understand your spending, set a budget, and keep your goals in sight.</p>
+      </div>
+      <div class="visual-note"><span class="note-icon">↗</span><span>Small steps add up.<br><strong>Start with today.</strong></span></div>
+      <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-mobile-brand brand"><span class="brand-mark">◎</span> Pennywise</div>
+      <div class="auth-card">
+        <p class="eyebrow" id="auth-eyebrow">WELCOME BACK</p>
+        <h2 id="auth-title">Sign in to your account</h2>
+        <p class="muted" id="auth-subtitle">Your finances are ready when you are.</p>
+        <div id="auth-message" class="form-message" role="status" aria-live="polite"></div>
+        <form id="auth-form" novalidate>
+          <label id="name-field" class="field hidden">Your name<input name="name" autocomplete="name" minlength="2" maxlength="60" placeholder="e.g. Alex Morgan"></label>
+          <label class="field">Email address<input name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label>
+          <label class="field">Password<input name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="72" placeholder="At least 8 characters"></label>
+          <button class="button button-primary button-wide" type="submit" id="auth-submit">Sign in <span>→</span></button>
+        </form>
+        <p class="auth-switch"><span id="auth-switch-copy">New to Pennywise?</span> <button id="auth-switch" type="button" class="text-button">Create an account</button></p>
+        <p class="auth-privacy">🔒 &nbsp;Your account data stays private to you.</p>
+      </div>
+      <footer class="auth-footer">A simple tool for thoughtful spending.</footer>
+    </section>
+  </main>
+
+  <div id="app-screen" class="app-shell hidden">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard"><span class="brand-mark">◎</span> Pennywise</a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#dashboard"><span>▦</span> Overview</a>
+        <a class="nav-link" href="#transactions"><span>↕</span> Transactions</a>
+        <a class="nav-link" href="#budget"><span>◷</span> Monthly budget</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip"><span class="tip-spark">✳</span><strong>A little clarity<br>goes a long way.</strong><small>Keep checking in with your money.</small></div>
+        <div class="user-mini"><div class="avatar" id="avatar-initial">U</div><div class="user-mini-copy"><strong id="sidebar-name">Your account</strong><small>Personal account</small></div><button id="logout-button" class="icon-button" title="Sign out" aria-label="Sign out">↪</button></div>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong id="topbar-section">Overview</strong></div><div class="topbar-right"><span class="today-pill"><span class="live-dot"></span> <span id="today-label"></span></span><button id="mobile-logout" class="icon-button mobile-only" aria-label="Sign out" title="Sign out">↪</button></div></header>
+      <main class="content">
+        <div id="notice" class="notice" role="status" aria-live="polite"></div>
+        <section id="dashboard-section" class="page-section">
+          <div class="page-heading"><div><p class="eyebrow">YOUR FINANCES AT A GLANCE</p><h1>Good to see you, <span id="greeting-name">there</span><span class="heading-period">.</span></h1><p class="muted">Here’s a snapshot of your money so far.</p></div><a class="button button-dark" href="#transactions">+ Add transaction</a></div>
+          <div class="dashboard-controls"><label>Summary period <input id="summary-month" type="month"></label><button id="summary-all" class="button button-outline">All time</button></div><div class="summary-grid">
+            <article class="summary-card balance-card"><div class="card-top"><span>Net balance</span><span class="stat-icon green-icon">◈</span></div><strong class="stat-value" id="balance-value">₹0.00</strong><div class="stat-foot"><span class="mini-dot"></span>Income minus expenses</div><div class="balance-decoration">₹</div></article>
+            <article class="summary-card"><div class="card-top"><span>Total income</span><span class="stat-icon">↙</span></div><strong class="stat-value" id="income-value">₹0.00</strong><div class="stat-foot summary-period">Across all records</div><div class="card-rule income-rule"></div></article>
+            <article class="summary-card"><div class="card-top"><span>Total expenses</span><span class="stat-icon expense-icon">↗</span></div><strong class="stat-value" id="expense-value">₹0.00</strong><div class="stat-foot summary-period">Across all records</div><div class="card-rule expense-rule"></div></article>
+          </div>
+
+          <section class="surface insights"><h2>Spending by category</h2><div id="category-chart"></div><p id="month-comparison"></p></section><div class="dashboard-lower">
+            <section class="surface budget-preview" id="dashboard-budget">
+              <div class="surface-heading"><div><p class="eyebrow" id="preview-month">THIS MONTH</p><h2>Spending plan</h2></div><a href="#budget" class="inline-link">View budget <span>→</span></a></div>
+              <div class="budget-preview-row"><div><strong id="preview-spent">₹0.00</strong><span> spent of </span><strong id="preview-limit">₹0.00</strong></div><span id="preview-percent" class="budget-percent">No budget yet</span></div>
+              <div class="progress-track" role="progressbar" aria-label="Budget used" aria-valuemin="0" aria-valuemax="100"><div id="preview-progress" class="progress-fill"></div></div>
+              <p id="preview-budget-note" class="muted small-note">Set a monthly limit to keep your plans on track.</p>
+            </section>
+            <section class="surface recent-preview">
+              <div class="surface-heading"><div><p class="eyebrow">LATEST ACTIVITY</p><h2>Recent transactions</h2></div><a href="#transactions" class="inline-link">See all <span>→</span></a></div>
+              <div id="recent-list" class="recent-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="transactions-section" class="page-section hidden">
+          <div class="page-heading"><div><p class="eyebrow">KEEP THE DETAILS</p><h1>Transactions</h1><p class="muted">Every entry, all in one place.</p></div><div class="export-actions"><button id="export-csv" class="button button-outline">↓ Export CSV</button><button id="export-json" class="button button-outline">↓ JSON</button></div></div>
+          <div class="transactions-layout">
+            <section class="surface transaction-form-card">
+              <div class="surface-heading"><div><p class="eyebrow">NEW ENTRY</p><h2 id="entry-title">Add transaction</h2></div><span class="form-badge">✦</span></div>
+              <form id="transaction-form" novalidate>
+                <div class="type-toggle" role="group" aria-label="Transaction type"><button type="button" class="type-option selected" data-type="expense" aria-pressed="true">Expense</button><button type="button" class="type-option" data-type="income" aria-pressed="false">Income</button></div>
+                <label class="field">Amount <span class="field-required">*</span><div class="amount-input"><span>₹</span><input name="amount" type="number" min="0.01" max="1000000000" step="0.01" required placeholder="0.00"></div></label>
+                <label class="field">Category <span class="field-required">*</span><select name="category" required><option value="">Choose a category</option><option>Food</option><option>Rent</option><option>Travel</option><option>Utilities</option><option>Other</option><option>Salary</option><option>Freelance</option><option>Gifts</option></select></label>
+                <label class="field">Date <span class="field-required">*</span><input name="date" type="date" required></label>
+                <label class="field">Notes <span class="optional-label">OPTIONAL</span><textarea name="notes" maxlength="250" rows="3" placeholder="Add a detail to remember..."></textarea><small class="field-hint">Up to 250 characters</small></label>
+                <button class="button button-primary button-wide" type="submit" id="save-entry">Save transaction <span>→</span></button><button type="button" id="cancel-edit" class="button button-outline hidden">Cancel editing</button>
+              </form>
+            </section>
+            <section class="surface history-card" id="transactions">
+              <div class="surface-heading history-heading"><div><p class="eyebrow">YOUR RECORDS</p><h2>Transaction history</h2></div><span class="record-count" id="record-count">0 records</span></div>
+              <form id="filter-form" class="filters"><label class="filter-field">Search<input name="search" type="search" placeholder="Notes or category"></label><label class="filter-field">Type<select name="type"><option value="">All types</option><option value="income">Income</option><option value="expense">Expense</option></select></label>
+                <label class="filter-field">Category<select name="category"><option value="">All categories</option><option>Food</option><option>Rent</option><option>Travel</option><option>Utilities</option><option>Other</option><option>Salary</option><option>Freelance</option><option>Gifts</option></select></label>
+                <label class="filter-field">From<input name="from" type="date"></label><label class="filter-field">To<input name="to" type="date"></label>
+                <button type="submit" class="button button-dark filter-button">Apply</button><button type="reset" id="clear-filters" class="clear-button">Clear</button>
+              </form>
+              <div class="history-feedback"><span id="history-status" role="status"></span><button id="history-retry" class="text-button">Retry loading</button></div><div class="table-wrap"><table><thead><tr><th>TRANSACTION</th><th>CATEGORY</th><th>DATE</th><th>AMOUNT</th><th><span class="visually-hidden">Actions</span></th></tr></thead><tbody id="transaction-rows"></tbody></table></div>
+              <div class="pagination"><button id="page-prev" class="button button-outline">Previous</button><span id="page-label" aria-live="polite"></span><button id="page-next" class="button button-outline">Next</button></div><div id="history-empty" class="empty-state hidden"><span class="empty-icon">↕</span><strong>No transactions yet</strong><p>When you add a transaction, it will show up here.</p></div>
+              <div id="filter-empty" class="empty-state hidden"><span class="empty-icon">⌕</span><strong>No matching transactions</strong><p>Try changing your filters.</p></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="budget-section" class="page-section hidden">
+          <div class="page-heading"><div><p class="eyebrow">SPEND WITH INTENTION</p><h1>Monthly budget</h1><p class="muted">Choose a monthly limit and watch your progress.</p></div></div>
+          <div class="budget-layout">
+            <section class="surface budget-editor">
+              <p class="eyebrow">YOUR PLAN</p><h2>Set a spending limit</h2><p class="muted">Your spending is calculated from expense transactions in the selected month.</p>
+              <form id="budget-form" novalidate><label class="field">Month<input name="month" type="month" required></label><label class="field">Monthly limit<div class="amount-input"><span>₹</span><input name="limit" type="number" min="0.01" max="1000000000" step="0.01" required placeholder="e.g. 25000"></div></label><button class="button button-primary" type="submit">Save monthly budget <span>→</span></button></form>
+            </section>
+            <section class="surface budget-card-large"><div class="budget-large-top"><div><p class="eyebrow">MONTHLY OVERVIEW</p><h2 id="budget-month-label">This month</h2></div><span class="budget-round-icon">◷</span></div><div class="budget-total-row"><div><span class="muted">You’ve spent</span><strong id="budget-spent">₹0.00</strong></div><div class="limit-value"><span class="muted">Your limit</span><strong id="budget-limit">Not set</strong></div></div><div class="progress-track progress-track-large" role="progressbar" aria-label="Budget used" aria-valuemin="0" aria-valuemax="100"><div id="budget-progress" class="progress-fill"></div></div><div class="budget-status-row"><span id="budget-status">Set a budget to get started</span><strong id="budget-percent">—</strong></div><div class="budget-callout" id="budget-callout"><span>✳</span><p>Small spending check-ins can make your goals feel more achievable.</p></div></section>
+          </div>
+          <div class="budget-footnote">Budget progress counts expense entries only. Income entries do not reduce your spending total.</div>
+        </section>
+        <footer class="content-footer"><span>Thoughtful money habits, one step at a time.</span><span>Made for clarity <b>✳</b></span></footer>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
